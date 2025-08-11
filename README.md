@@ -1,0 +1,1 @@
+# ImplementacaoSoft_2025_2

@@ -1,0 +1,23 @@
+print("Digite números inteiros positivos (digite 0 para encerrar):")
+
+while True:
+    try:
+        # Recebe a entrada do usuário
+        numero = int(input("> "))
+        
+        # Verifica se é 0 para encerrar o programa
+        if numero == 0:
+            print("Programa encerrado.")
+            break
+        
+        # Verifica se é positivo
+        if numero < 0:
+            print("Por favor, digite apenas números positivos ou zero para encerrar.")
+            continue
+        
+        # Verifica se está no intervalo [5, 15]
+        if 5 <= numero <= 15:
+            print(f"Número no intervalo: {numero}")
+            
+    except ValueError:
+        print("Por favor, digite apenas números inteiros.")

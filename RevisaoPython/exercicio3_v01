@@ -1,0 +1,6 @@
+while True:
+    numero = int(input())
+    if numero == 0:
+        break
+    if 5 <= numero <= 15:
+        print(numero)

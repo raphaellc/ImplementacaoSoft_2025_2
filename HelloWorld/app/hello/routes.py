@@ -14,7 +14,7 @@ def novoUsuario():
     if request.method == 'POST':
         # Obtém os dados do formulário
         username = request.form['nome_usuario']
-        email = 'r@gmail.com'#request.form['email']
+        email = request.form['email_usuario']
 
         # Cria uma nova instância do modelo User
         novo_usuario = User(username=username, email=email)
@@ -29,3 +29,23 @@ def novoUsuario():
         return redirect('/hello')
 
     return "Método não permitido", 405
+
+@hello_bp.route('/removerUsuario/<int:usuario_id>', methods=['POST'])
+def removerUsuario(usuario_id):
+    usuario = User.query.get(usuario_id)
+    if usuario:
+        db.session.delete(usuario)
+        db.session.commit()
+    return redirect(url_for('hello.index'))
+
+@hello_bp.route('/editarUsuario/<int:usuario_id>', methods=['GET', 'POST'])
+def editarUsuario(usuario_id):
+    usuario = User.query.get(usuario_id)
+    if request.method == 'POST':
+        # Atualiza os dados do usuário
+        if usuario:
+                usuario.username = request.form['nome_usuario']
+                usuario.email = request.form['email_usuario']
+                db.session.commit()
+    return redirect(url_for('hello.index'))
+    

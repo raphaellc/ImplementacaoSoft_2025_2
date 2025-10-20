@@ -17,7 +17,7 @@
       {% endif %}
     {% endwith %}
 
-    <form class="create-form" action="{{ url_for('hello.novoUsuario') }}" method="POST" validated>
+    <form class="create-form" action="{{ url_for('hello.criarUsuario') }}" method="POST" validated>
         {{ form.hidden_tag() }} <div class="form-group">
             {{ form.username.label }}
             {{ form.username(class="form-control", placeholder="Nome do usuário") }}

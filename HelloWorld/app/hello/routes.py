@@ -12,7 +12,7 @@ def index():
     return render_template('index.html', usuarios=usuarios, form=form)
 
 @hello_bp.route('/novoUsuario', methods=['GET', 'POST'])
-def novoUsuario():
+def criarUsuario():
     form = UsuarioForm()
     if form.validate_on_submit():
         username = form.username.data

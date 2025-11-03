@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Tarefas</title>
+    <!-- Adapte o caminho do CSS se necessário -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <h1>Criar Nova Tarefa para {{ user.username }}</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form class="create-form" action="{{ url_for('tarefas.listarTarefasUsuario', user_id=user.id) }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.titulo.label }}
+            {{ form.titulo(class="form-control", placeholder="Título da tarefa") }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.descricao.label }}
+            {{ form.descricao(class="form-control", rows="3", placeholder="Detalhes da tarefa...") }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.status.label }}
+            {{ form.status(class="form-control") }}
+        </div>
+        
+        {{ form.submit(class="btn-submit") }}
+    </form>
+    
+    <h1>Tarefas de {{ user.username }}</h1>
+    <ul>
+        {% for tarefa in tarefas %}
+            <li>
+                <span>
+                    <strong>{{ tarefa.titulo }}</strong> (Status: {{ tarefa.status_atual.nome }})
+                    <p>{{ tarefa.descricao or 'Sem descrição.' }}</p>
+                </span>
+                <div class="user-actions">
+                    <a href="{{ url_for('tarefas.editarTarefa', tarefa_id=tarefa.id) }}" class="btn-edit">Editar</a>
+                    
+                    <form class="remove-form" action="{{ url_for('tarefas.removerTarefa', tarefa_id=tarefa.id) }}" method="POST">
+                        <button type="submit">Remover</button>
+                    </form>
+                </div>
+            </li>
+        {% else %}
+            <li>Nenhuma tarefa cadastrada.</li>
+        {% endfor %}
+    </ul>
+    
+</body>
+</html>
+

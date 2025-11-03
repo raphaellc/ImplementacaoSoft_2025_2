@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Tarefa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <h1>Editar Tarefa: {{ tarefa.titulo }}</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- O formulário aponta para a rota de edição -->
+    <form class="create-form" action="{{ url_for('tarefas.editarTarefa', tarefa_id=tarefa.id) }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.titulo.label }}
+            {{ form.titulo(class="form-control") }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.descricao.label }}
+            {{ form.descricao(class="form-control", rows="3") }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.status.label }}
+            {{ form.status(class="form-control") }}
+        </div>
+
+        {{ form.submit(class="btn-submit") }}
+    </form>
+    <h3>Histórico de Status</h3>
+    <ul>
+    {% for log in tarefa.historico_status | sort(reverse=True, attribute='dt_modificacao_status') %}
+        <li>
+            Status alterado para <strong>{{ log.status.nome }}</strong>
+            em {{ log.dt_modificacao_status.strftime('%d/%m/%Y às %H:%M') }}
+        </li>
+    {% endfor %}
+    </ul>
+    <a href="{{ url_for('tarefas.listarTarefasUsuario', user_id=tarefa.user_id) }}">Voltar para a lista de tarefas</a>
+</body>
+</html>

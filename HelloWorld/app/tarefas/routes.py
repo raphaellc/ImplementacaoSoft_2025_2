@@ -2,9 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 # Adicionado User para buscar o usuário pelo ID
 from ..models import db, Tarefa, User, Status, StatusTarefa
 from .forms import TarefaForm
+from flask_login import login_required, current_user
 
-# Crie um novo Blueprint para tarefas
-# O prefixo /tarefas foi removido para dar mais flexibilidade às rotas
 tarefas_bp = Blueprint('tarefas', __name__)
 
 def popular_status_form(form):
@@ -12,14 +11,14 @@ def popular_status_form(form):
     print(status_escolhas)
     form.status.choices = status_escolhas
 
-
-# A rota agora espera o ID do usuário para saber de quem são as tarefas
-@tarefas_bp.route('/usuario/<int:user_id>/tarefas', methods=['GET', 'POST'])
-def listarTarefasUsuario(user_id):
+@tarefas_bp.route('/tarefas', methods=['GET', 'POST'])
+@login_required # <-- Rota agora protegida
+#@tarefas_bp.route('/usuario/<int:user_id>/tarefas', methods=['GET', 'POST'])
+def listarTarefasUsuario():
     """
     Exibe a lista de tarefas de um usuário específico e o formulário para criar uma nova.
     """
-    user = User.query.get_or_404(user_id)
+    user = current_user #User.query.get_or_404(user_id)
     print(user)
     form = TarefaForm()
     popular_status_form(form)
@@ -56,6 +55,7 @@ def listarTarefasUsuario(user_id):
 
 
 @tarefas_bp.route('/tarefas/editar/<int:tarefa_id>', methods=['GET', 'POST'])
+@login_required # <-- Rota agora protegida
 def editarTarefa(tarefa_id):
     """
     Rota para editar uma tarefa existente.
@@ -84,6 +84,7 @@ def editarTarefa(tarefa_id):
     return render_template('editar_tarefas.html', form=form, tarefa=tarefa)
 
 @tarefas_bp.route('/tarefas/remover/<int:tarefa_id>', methods=['POST'])
+@login_required
 def removerTarefa(tarefa_id):
     """
     Rota para remover uma tarefa.

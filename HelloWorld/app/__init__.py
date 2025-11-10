@@ -3,6 +3,8 @@ import os
 from .hello.routes import hello_bp
 from .tarefas.routes import tarefas_bp
 from .autenticacao.routes import auth_bp
+from .api.routes import api_bp
+    
 
 from .models import db, User  # Importa a instância 'db' do models.py
 from flask_migrate import Migrate
@@ -36,7 +38,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(hello_bp, url_prefix='/hello')
     app.register_blueprint(tarefas_bp, url_prefix='/tarefas')
-
+    app.register_blueprint(api_bp)
 
     return app
 

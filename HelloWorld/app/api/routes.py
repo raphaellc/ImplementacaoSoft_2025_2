@@ -30,7 +30,6 @@ def token_required(f):
 
         try:
             # Decodifica o token usando a SECRET_KEY da aplicação
-            print(token)
             data = jwt.decode(
                 token, 
                 current_app.config['SECRET_KEY'].encode('utf-8'), 
@@ -84,7 +83,7 @@ def api_login():
         current_app.config['SECRET_KEY'].encode('utf-8'),
         algorithm="HS256"
     )
-    print(token)
+    
     return jsonify({"mensagem": "Login bem-sucedido", "token": token})
 
 # --- ROTA DE API PROTEGIDA ---

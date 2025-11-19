@@ -3,13 +3,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from ..models import db, Tarefa, User, Status, StatusTarefa
 from .forms import TarefaForm
 from flask_login import login_required, current_user
+from .utils import popular_status_form
 
 tarefas_bp = Blueprint('tarefas', __name__)
-
-def popular_status_form(form):
-    status_escolhas = [(s.id, s.nome) for s in Status.query.order_by('nome').all()]
-    print(status_escolhas)
-    form.status.choices = status_escolhas
 
 @tarefas_bp.route('/tarefas', methods=['GET', 'POST'])
 @login_required # <-- Rota agora protegida
